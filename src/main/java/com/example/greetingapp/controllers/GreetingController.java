@@ -13,27 +13,27 @@ public class GreetingController {
     GreetingService greetingService;
 
     @GetMapping("/")
-    public String greeting() {
+    public java.lang.String greeting() {
         return "Hello! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting-param/{name}")
-    public String greeting(@PathVariable String name) {
+    public java.lang.String greeting(@PathVariable java.lang.String name) {
         return "Hello " + name + "! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting")
-    public String greeting(@RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname) {
+    public java.lang.String greeting(@RequestParam(value = "fname") java.lang.String fname, @RequestParam(value = "lname") java.lang.String lname) {
         return "Hello " + fname + " " + lname + "! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting-service")
-    public String greetingService() {
+    public java.lang.String greetingService() {
         return greetingService.simpleHelloGreeting();
     }
 
     @GetMapping("/greeting-message/{name}")
-    public String greetingMessage(@PathVariable String name, @RequestParam(required = false, value = "param") String param, @RequestParam(required = false, value = "param1") String param1) {
+    public java.lang.String greetingMessage(@PathVariable java.lang.String name, @RequestParam(required = false, value = "param") java.lang.String param, @RequestParam(required = false, value = "param1") java.lang.String param1) {
         StringBuilder string = new StringBuilder();
         string.append(greetingService.simpleHelloGreeting());
         if (!name.isBlank()) {
@@ -50,7 +50,11 @@ public class GreetingController {
 
     @PostMapping("/greetingMessage")
     public Greeting saveGreeting(@RequestBody GreetingDto greetingDto){
-        return greetingService.saveMessage(greetingDto);
+        return greetingService.saveGreeting(greetingDto);
     }
 
+    @GetMapping("/greetingMessage/{id}")
+    public String findGreetingById(@PathVariable int id){
+        return greetingService.findGreetingById(id);
+    }
 }
