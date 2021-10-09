@@ -6,6 +6,7 @@ import com.example.greetingapp.model.Greeting;
 import com.example.greetingapp.repository.GreetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,5 +47,11 @@ public class GreetingService {
         Greeting greeting = this.findGreetingById(id);
         greeting.setMessage(greetingDto.getMessage());
         return greetingRepository.save(greeting);
+    }
+
+    public String deleteGreeting(int id) throws GreetingException {
+        Greeting greeting = this.findGreetingById(id);
+        greetingRepository.delete(greeting);
+        return "Greeting with id: " + id + " is deleted successfully";
     }
 }

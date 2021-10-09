@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class GreetingController {
@@ -69,6 +68,11 @@ public class GreetingController {
 
     @PutMapping("/greetingMessage/{id}")
     public Greeting editGreeting(@PathVariable int id, @RequestBody GreetingDto greetingDto) throws GreetingException {
-        return greetingService.editGreeting(id,greetingDto);
+        return greetingService.editGreeting(id, greetingDto);
+    }
+
+    @DeleteMapping("/greetingMessage/{id}")
+    public String deleteMessage(@PathVariable int id) throws GreetingException {
+        return greetingService.deleteGreeting(id);
     }
 }
