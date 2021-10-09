@@ -26,10 +26,10 @@ public class GreetingService {
         return greetingRepository.save(greeting);
     }
 
-    public Optional<Greeting> findGreetingById(int id) throws GreetingException {
+    public Greeting findGreetingById(int id) throws GreetingException {
         Optional<Greeting> greeting = greetingRepository.findById(id);
         if (greeting.isPresent()) {
-            return greeting;
+            return greeting.get();
         }
         throw new GreetingException("Cannot find Greeting with given id: " + id);
     }
@@ -40,5 +40,11 @@ public class GreetingService {
             throw new GreetingException("Cannot find any Greetings in List");
         }
         return greetingList;
+    }
+
+    public Greeting editGreeting(int id, GreetingDto greetingDto) throws GreetingException {
+        Greeting greeting = this.findGreetingById(id);
+        greeting.setMessage(greetingDto.getMessage());
+        return greetingRepository.save(greeting);
     }
 }

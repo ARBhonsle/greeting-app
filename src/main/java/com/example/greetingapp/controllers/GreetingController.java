@@ -58,7 +58,7 @@ public class GreetingController {
     }
 
     @GetMapping("/greetingMessage/{id}")
-    public Optional<Greeting> findGreetingById(@PathVariable int id) throws GreetingException {
+    public Greeting findGreetingById(@PathVariable int id) throws GreetingException {
         return greetingService.findGreetingById(id);
     }
 
@@ -67,4 +67,8 @@ public class GreetingController {
         return greetingService.listAllGreetings();
     }
 
+    @PutMapping("/greetingMessage/{id}")
+    public Greeting editGreeting(@PathVariable int id, @RequestBody GreetingDto greetingDto) throws GreetingException {
+        return greetingService.editGreeting(id,greetingDto);
+    }
 }
