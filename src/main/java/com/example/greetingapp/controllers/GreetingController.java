@@ -18,20 +18,35 @@ public class GreetingController {
         return "Hello! Welcome to Greeting App!";
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/greeting-param/{name}")
     public String greeting(@PathVariable String name) {
         return "Hello " + name + "! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting")
     public String greeting(@RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname) {
-        return "Hello " + fname + " " + lname +"! Welcome to Greeting App!";
+        return "Hello " + fname + " " + lname + "! Welcome to Greeting App!";
     }
 
     @GetMapping("/greeting-service")
-    public String greetingService(){
+    public String greetingService() {
         return greetingService.simpleHelloGreeting();
     }
 
+    @GetMapping("/greeting-message/{name}")
+    public String greetingMessage(@PathVariable String name, @RequestParam(required = false, value = "param") String param, @RequestParam(required = false, value = "param1") String param1) {
+        StringBuilder string = new StringBuilder();
+        string.append(greetingService.simpleHelloGreeting());
+        if (!name.isBlank()) {
+            string.append(" " + name);
+        }
+        if (!param.isBlank()) {
+            string.append(" and " + param);
+        }
+        if (!param1.isBlank()) {
+            string.append(" " + param1);
+        }
+        return string.toString();
+    }
 
 }
