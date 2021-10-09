@@ -1,11 +1,10 @@
 package com.example.greetingapp.controllers;
 
+import com.example.greetingapp.dto.GreetingDto;
+import com.example.greetingapp.model.Greeting;
 import com.example.greetingapp.services.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GreetingController {
@@ -47,6 +46,11 @@ public class GreetingController {
             string.append(" " + param1);
         }
         return string.toString();
+    }
+
+    @PostMapping("/greetingMessage")
+    public Greeting saveGreeting(@RequestBody GreetingDto greetingDto){
+        return greetingService.saveMessage(greetingDto);
     }
 
 }
