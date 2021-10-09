@@ -1,10 +1,14 @@
 package com.example.greetingapp.controllers;
 
 import com.example.greetingapp.dto.GreetingDto;
+import com.example.greetingapp.exceptions.GreetingException;
 import com.example.greetingapp.model.Greeting;
 import com.example.greetingapp.services.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class GreetingController {
@@ -49,12 +53,18 @@ public class GreetingController {
     }
 
     @PostMapping("/greetingMessage")
-    public Greeting saveGreeting(@RequestBody GreetingDto greetingDto){
+    public Greeting saveGreeting(@RequestBody GreetingDto greetingDto) {
         return greetingService.saveGreeting(greetingDto);
     }
 
     @GetMapping("/greetingMessage/{id}")
-    public String findGreetingById(@PathVariable int id){
+    public Optional<Greeting> findGreetingById(@PathVariable int id) throws GreetingException {
         return greetingService.findGreetingById(id);
     }
+
+    @GetMapping("/greetingMessage/findAll")
+    public List<Greeting> findAllGreetings() throws GreetingException {
+        return greetingService.listAllGreetings();
+    }
+
 }
