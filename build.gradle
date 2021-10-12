@@ -25,6 +25,9 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/org.modelmapper.extensions/modelmapper-spring
+    implementation group: 'org.modelmapper.extensions', name: 'modelmapper-spring', version: '2.4.4'
+
 }
 
 test {

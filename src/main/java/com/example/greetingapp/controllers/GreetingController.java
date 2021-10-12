@@ -1,78 +1,143 @@
 package com.example.greetingapp.controllers;
 
 import com.example.greetingapp.dto.GreetingDto;
+import com.example.greetingapp.dto.ResponseDto;
 import com.example.greetingapp.exceptions.GreetingException;
-import com.example.greetingapp.model.Greeting;
 import com.example.greetingapp.services.GreetingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.lang.String;
 
+/**
+ * Greeting Controller
+ * recieves http request from client and perform functions and give response to clients
+ *
+ * @author Aditi
+ * @version 0.0.1
+ * @since 12-10-2021
+ */
 @RestController
 public class GreetingController {
 
     @Autowired
     GreetingService greetingService;
 
+    /**
+     * method accepts GET http request from clients and responds with simple greeting
+     *
+     * @return
+     */
     @GetMapping("/")
-    public java.lang.String greeting() {
+    public String greeting() {
         return "Hello! Welcome to Greeting App!";
     }
 
+    /**
+     * method accepts parameters from url path of http request from clients
+     *
+     * @param name from url path
+     * @return String
+     */
     @GetMapping("/greeting-param/{name}")
-    public java.lang.String greeting(@PathVariable java.lang.String name) {
+    public String greeting(@PathVariable String name) {
         return "Hello " + name + "! Welcome to Greeting App!";
     }
 
+    /**
+     * method to accept fname and lname from url path of http request and gives response
+     *
+     * @param fname from url path
+     * @param lname from url path
+     * @return ResponseEntity<ResponseDto>
+     */
     @GetMapping("/greeting")
-    public java.lang.String greeting(@RequestParam(value = "fname") java.lang.String fname, @RequestParam(value = "lname") java.lang.String lname) {
-        return "Hello " + fname + " " + lname + "! Welcome to Greeting App!";
+    public ResponseEntity<ResponseDto> greeting(@RequestParam(value = "fname") String fname, @RequestParam(value = "lname") String lname) {
+        ResponseDto respDto = new ResponseDto("Hello " + fname + " " + lname + "! Welcome to Greeting App!", null);
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @return ResponseEntity<ResponseDto>
+     */
     @GetMapping("/greeting-service")
-    public java.lang.String greetingService() {
-        return greetingService.simpleHelloGreeting();
+    public ResponseEntity<ResponseDto> greetingService() {
+        ResponseDto respDto = new ResponseDto(greetingService.simpleHelloGreeting("", "", ""), null);
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param name from url path of request
+     * @param param from request query parameters
+     * @param param1 from request query parameters
+     * @return ResponseEntity<ResponseDto>
+     */
     @GetMapping("/greeting-message/{name}")
-    public java.lang.String greetingMessage(@PathVariable java.lang.String name, @RequestParam(required = false, value = "param") java.lang.String param, @RequestParam(required = false, value = "param1") java.lang.String param1) {
-        StringBuilder string = new StringBuilder();
-        string.append(greetingService.simpleHelloGreeting());
-        if (!name.isBlank()) {
-            string.append(" " + name);
-        }
-        if (!param.isBlank()) {
-            string.append(" and " + param);
-        }
-        if (!param1.isBlank()) {
-            string.append(" " + param1);
-        }
-        return string.toString();
+    public ResponseEntity<ResponseDto> greetingMessage(@PathVariable String name, @RequestParam(required = false, value = "param") String param, @RequestParam(required = false, value = "param1") String param1) {
+        ResponseDto respDto = new ResponseDto(greetingService.simpleHelloGreeting(name, param, param1), null);
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param greetingDto from request body
+     * @return ResponseEntity<ResponseDto>
+     */
     @PostMapping("/greetingMessage")
-    public Greeting saveGreeting(@RequestBody GreetingDto greetingDto) {
-        return greetingService.saveGreeting(greetingDto);
+    public ResponseEntity<ResponseDto> saveGreeting(@RequestBody GreetingDto greetingDto) {
+        ResponseDto respDto = new ResponseDto("Greeting Saved", greetingService.saveGreeting(greetingDto));
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id from url path of request
+     * @return ResponseEntity<ResponseDto>
+     * @throws GreetingException
+     */
     @GetMapping("/greetingMessage/{id}")
-    public Greeting findGreetingById(@PathVariable int id) throws GreetingException {
-        return greetingService.findGreetingById(id);
+    public ResponseEntity<ResponseDto> findGreetingById(@PathVariable int id) throws GreetingException {
+        ResponseDto respDto = new ResponseDto("Greeting Found by id: " + id, greetingService.findGreetingById(id));
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @return ResponseEntity<ResponseDto>
+     * @throws GreetingException
+     */
     @GetMapping("/greetingMessage/findAll")
-    public List<Greeting> findAllGreetings() throws GreetingException {
-        return greetingService.listAllGreetings();
+    public ResponseEntity<ResponseDto> findAllGreetings() throws GreetingException {
+        ResponseDto respDto = new ResponseDto("Found all greeting", greetingService.listAllGreetings());
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id from url path of request
+     * @param greetingDto from request body
+     * @return ResponseEntity<ResponseDto>
+     * @throws GreetingException
+     */
     @PutMapping("/greetingMessage/{id}")
-    public Greeting editGreeting(@PathVariable int id, @RequestBody GreetingDto greetingDto) throws GreetingException {
-        return greetingService.editGreeting(id, greetingDto);
+    public ResponseEntity<ResponseDto> editGreeting(@PathVariable int id, @RequestBody GreetingDto greetingDto) throws GreetingException {
+        ResponseDto respDto = new ResponseDto("Updated greeting with id: " + id, greetingService.editGreeting(id, greetingDto));
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 
+    /**
+     *
+     * @param id from url path of request
+     * @return ResponseEntity<ResponseDto>
+     * @throws GreetingException
+     */
     @DeleteMapping("/greetingMessage/{id}")
-    public String deleteMessage(@PathVariable int id) throws GreetingException {
-        return greetingService.deleteGreeting(id);
+    public ResponseEntity<ResponseDto> deleteMessage(@PathVariable int id) throws GreetingException {
+        ResponseDto respDto = new ResponseDto("Deleted greeting with id: " + id, greetingService.deleteGreeting(id));
+        return new ResponseEntity<ResponseDto>(respDto, HttpStatus.OK);
     }
 }
